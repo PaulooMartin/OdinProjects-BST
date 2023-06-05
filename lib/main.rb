@@ -55,6 +55,19 @@ class Tree
     current_node
   end
 
+  def find(value, current_node = @root)
+    return puts "#{value} is not in BST" if current_node.nil?
+
+    result = value <=> current_node.data
+    if result.positive?
+      find(value, current_node.right)
+    elsif result.negative?
+      find(value, current_node.left)
+    else
+      current_node
+    end
+  end
+
   # Thank you pretty print, whoever your creator is!
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
@@ -94,3 +107,4 @@ quack.pretty_print
 puts '-----------------------------'
 quack.delete(24)
 quack.pretty_print
+puts quack.find(26)
