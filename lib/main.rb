@@ -29,6 +29,18 @@ class Tree
     root
   end
 
+  # Wonder how others did this, mine is a bit questionable because of re-assign of already correct nodes
+  def insert(value, current_node = @root)
+    return Node.new(value) if current_node.nil?
+
+    if value < current_node.data
+      current_node.left_child = insert(value, current_node.left_child)
+    else
+      current_node.right_child = insert(value, current_node.right_child)
+    end
+    current_node
+  end
+
   # Thank you pretty print, whoever your creator is!
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
@@ -36,6 +48,12 @@ class Tree
     pretty_print(node.left_child, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left_child
   end
 end
-sorted_array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
-quack = Tree.new(sorted_array)
+
+test_array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
+quack = Tree.new(test_array)
+quack.insert(123)
+quack.insert(12)
+quack.insert(10)
+quack.insert(13)
+quack.insert(14)
 quack.pretty_print
