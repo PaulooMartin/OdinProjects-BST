@@ -65,6 +65,7 @@ class Tree
   private
 
   def delete_matched(delete_node)
+    # It's not really deleting, it's replacing with the lowest value from right subtree
     if delete_node.left.nil?
       delete_node.right
     elsif delete_node.right.nil?
