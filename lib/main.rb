@@ -1,11 +1,11 @@
 class Node
   include Comparable
-  attr_accessor :left_child, :right_child, :data
+  attr_accessor :left, :right, :data
 
   def initialize(value)
     @data = value
-    @left_child = nil
-    @right_child = nil
+    @left = nil
+    @right = nil
   end
 
   def <=>(other)
@@ -23,8 +23,8 @@ class Tree
 
     mid_index = array.length / 2
     root = Node.new(array[mid_index])
-    root.left_child = build_tree(array[0...mid_index])
-    root.right_child = build_tree(array[mid_index + 1..])
+    root.left = build_tree(array[0...mid_index])
+    root.right = build_tree(array[mid_index + 1..])
     root
   end
 
@@ -34,9 +34,9 @@ class Tree
     return current_node if current_node.data == value
 
     if value < current_node.data
-      current_node.left_child = insert(value, current_node.left_child)
+      current_node.left = insert(value, current_node.left)
     else
-      current_node.right_child = insert(value, current_node.right_child)
+      current_node.right = insert(value, current_node.right)
     end
     current_node
   end
@@ -46,9 +46,9 @@ class Tree
 
     result = value <=> current_node.data
     if result.negative?
-      current_node.left_child = delete(value, current_node.left_child)
+      current_node.left = delete(value, current_node.left)
     elsif result.positive?
-      current_node.right_child = delete(value, current_node.right_child)
+      current_node.right = delete(value, current_node.right)
     else
       return delete_matched(current_node)
     end
@@ -57,29 +57,29 @@ class Tree
 
   # Thank you pretty print, whoever your creator is!
   def pretty_print(node = @root, prefix = '', is_left = true)
-    pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
+    pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
-    pretty_print(node.left_child, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left_child
+    pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
   end
 
   private
 
   def delete_matched(delete_node)
-    if delete_node.left_child.nil?
-      delete_node.right_child
-    elsif delete_node.right_child.nil?
-      delete_node.left_child
+    if delete_node.left.nil?
+      delete_node.right
+    elsif delete_node.right.nil?
+      delete_node.left
     else
-      lowest_node = find_min_value_node(delete_node.right_child)
+      lowest_node = find_min_value_node(delete_node.right)
       delete_node.data = lowest_node.data
-      delete_node.right_child = delete(lowest_node.data, delete_node.right_child)
+      delete_node.right = delete(lowest_node.data, delete_node.right)
       delete_node
     end
   end
 
   def find_min_value_node(right_subtree)
     lowest_node = right_subtree
-    lowest_node = lowest_node.left_child until lowest_node.left_child.nil?
+    lowest_node = lowest_node.left until lowest_node.left.nil?
     lowest_node
   end
 end
