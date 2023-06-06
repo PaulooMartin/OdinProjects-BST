@@ -131,7 +131,13 @@ class Tree # rubocop:disable Metrics/ClassLength
   end
 
   def balanced?
-
+    result = true
+    level_order do |node|
+      difference = height(node.left) - height(node.right)
+      result = difference.abs < 2
+      return result unless result
+    end
+    result
   end
 
   def rebalance; end
@@ -249,4 +255,6 @@ quack.pretty_print
 test_node = quack.find(8)
 puts quack.height(test_node)
 puts quack.depth(test_node)
-puts quack.balanced?
+# quack.insert(27)
+quack.pretty_print
+p quack.balanced?
