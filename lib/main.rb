@@ -140,7 +140,12 @@ class Tree # rubocop:disable Metrics/ClassLength
     result
   end
 
-  def rebalance; end
+  def rebalance
+    return if balanced?
+
+    new_tree = inorder
+    @root = build_tree(new_tree)
+  end
 
   # Thank you pretty print, whoever your creator is!
   def pretty_print(node = @root, prefix = '', is_left = true)
@@ -255,6 +260,10 @@ quack.pretty_print
 test_node = quack.find(8)
 puts quack.height(test_node)
 puts quack.depth(test_node)
-# quack.insert(27)
+quack.insert(27)
+quack.pretty_print
+p quack.balanced?
+puts '-----------------------------'
+quack.rebalance
 quack.pretty_print
 p quack.balanced?
