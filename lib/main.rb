@@ -68,6 +68,22 @@ class Tree
     end
   end
 
+  def level_order
+    queue = [@root]
+    all_values = []
+    until queue.empty?
+      if block_given?
+        yield queue[0].data
+      else
+        all_values << queue[0].data
+      end
+      queue << queue[0].left if queue[0].left
+      queue << queue[0].right if queue[0].right
+      queue.shift
+    end
+    all_values unless all_values.empty?
+  end
+
   # Thank you pretty print, whoever your creator is!
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
@@ -108,3 +124,4 @@ puts '-----------------------------'
 quack.delete(24)
 quack.pretty_print
 puts quack.find(26)
+quack.level_order
