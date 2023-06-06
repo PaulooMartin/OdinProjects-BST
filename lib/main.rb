@@ -117,6 +117,22 @@ class Tree # rubocop:disable Metrics/ClassLength
   def height(start_node)
     height_with_start(start_node) - 1
   end
+
+  def depth(node_to_find)
+    return if find(node_to_find.data).nil?
+
+    depth = 0
+    current_node = @root
+    until current_node == node_to_find
+      current_node = node_to_find.data < current_node.data ? current_node.left : current_node.right
+      depth += 1
+    end
+    depth
+  end
+
+  def balanced?; end
+  def rebalance; end
+
   # Thank you pretty print, whoever your creator is!
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
@@ -227,5 +243,6 @@ puts '-----------------------------'
 quack.postorder { |node| puts node.data }
 p quack.postorder
 quack.pretty_print
-test_node = quack.find(67)
+test_node = quack.find(26)
 puts quack.height(test_node)
+puts quack.depth(test_node)
