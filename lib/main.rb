@@ -94,7 +94,16 @@ class Tree # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def preorder; end
+  def preorder(&code_block)
+    if block_given?
+      preorder_with_block(@root, code_block)
+    else
+      values = []
+      preorder_no_block(@root, values)
+      values
+    end
+  end
+
   def postorder; end
 
   # Thank you pretty print, whoever your creator is!
@@ -141,6 +150,22 @@ class Tree # rubocop:disable Metrics/ClassLength
     array_to_fill << current_node.data
     inorder_no_block(current_node.right, array_to_fill)
   end
+
+  def preorder_with_block(current_node, code_block)
+    return if current_node.nil?
+
+    code_block.call current_node
+    preorder_with_block(current_node.left, code_block)
+    preorder_with_block(current_node.right, code_block)
+  end
+
+  def preorder_no_block(current_node, array_to_fill)
+    return if current_node.nil?
+
+    array_to_fill << current_node.data
+    preorder_no_block(current_node.left, array_to_fill)
+    preorder_no_block(current_node.right, array_to_fill)
+  end
 end
 
 test_array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
@@ -157,3 +182,7 @@ quack.level_order
 puts '-----------------------------'
 quack.inorder { |node| puts node.data }
 p quack.inorder
+puts '-----------------------------'
+quack.preorder { |node| puts node.data }
+p quack.preorder
+puts '-----------------------------'
