@@ -143,8 +143,8 @@ class Tree # rubocop:disable Metrics/ClassLength
   def rebalance
     return if balanced?
 
-    new_tree = inorder
-    @root = build_tree(new_tree)
+    bst = inorder
+    @root = build_tree(bst)
   end
 
   # Thank you pretty print, whoever your creator is!
@@ -236,34 +236,52 @@ class Tree # rubocop:disable Metrics/ClassLength
   end
 end
 
-test_array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
-quack = Tree.new(test_array)
-quack.insert(24)
-quack.insert(25)
-quack.insert(26)
-quack.pretty_print
-puts '-----------------------------'
-quack.delete(24)
-quack.pretty_print
-puts quack.find(26)
-quack.level_order
-puts '-----------------------------'
-quack.inorder { |node| puts node.data }
-p quack.inorder
-puts '-----------------------------'
-quack.preorder { |node| puts node.data }
-p quack.preorder
-puts '-----------------------------'
-quack.postorder { |node| puts node.data }
-p quack.postorder
-quack.pretty_print
-test_node = quack.find(8)
-puts quack.height(test_node)
-puts quack.depth(test_node)
-quack.insert(27)
-quack.pretty_print
-p quack.balanced?
-puts '-----------------------------'
-quack.rebalance
-quack.pretty_print
-p quack.balanced?
+puts 'Start Test'
+test_array = (Array.new(15) { rand(1..100) })
+bst = Tree.new (test_array) # good
+bst.pretty_print
+puts bst.balanced? # good
+puts '---------------------------- level order' # good both
+
+p bst.level_order
+bst.level_order { |node| puts node.data }
+puts '---------------------------- inorder' # good both
+
+p bst.inorder
+bst.inorder { |node| puts node.data }
+puts '---------------------------- preorder' # good both
+
+p bst.preorder
+bst.preorder { |node| puts node.data }
+puts '---------------------------- postorder' # good both
+
+p bst.postorder
+bst.postorder { |node| puts node.data }
+puts '---------------------------- unbalance via insert' # good
+
+insert_array = (Array.new(15) { rand(100..200) })
+insert_array.each { |element| bst.insert(element)}
+puts bst.balanced?
+puts '---------------------------- rebalance' # good
+
+bst.rebalance
+puts bst.balanced?
+puts '---------------------------- level order' # good both
+
+p bst.level_order
+bst.level_order { |node| puts node.data }
+puts '---------------------------- inorder' # good both
+
+p bst.inorder
+bst.inorder { |node| puts node.data }
+puts '---------------------------- preorder' # good both
+
+p bst.preorder
+bst.preorder { |node| puts node.data }
+puts '---------------------------- postorder' # good both
+
+p bst.postorder
+bst.postorder { |node| puts node.data }
+
+puts '---------------------------- final'
+bst.pretty_print
