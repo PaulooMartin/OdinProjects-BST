@@ -114,6 +114,9 @@ class Tree # rubocop:disable Metrics/ClassLength
     end
   end
 
+  def height(start_node)
+    height_with_start(start_node) - 1
+  end
   # Thank you pretty print, whoever your creator is!
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
@@ -190,6 +193,17 @@ class Tree # rubocop:disable Metrics/ClassLength
     postorder_no_block(current_node.right, array_to_fill)
     array_to_fill << current_node.data
   end
+
+  def height_with_start(start_node)
+    return 0 if start_node.nil?
+
+    left_height = 1
+    right_height = 1
+
+    left_height += height_with_start(start_node.left)
+    right_height += height_with_start(start_node.right)
+    left_height > right_height ? left_height : right_height
+  end
 end
 
 test_array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
@@ -213,3 +227,5 @@ puts '-----------------------------'
 quack.postorder { |node| puts node.data }
 p quack.postorder
 quack.pretty_print
+test_node = quack.find(67)
+puts quack.height(test_node)
