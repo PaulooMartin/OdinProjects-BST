@@ -13,7 +13,7 @@ class Node
   end
 end
 
-class Tree
+class Tree # rubocop:disable Metrics/ClassLength
   def initialize(array)
     @root = build_tree(array.sort.uniq)
   end
@@ -84,6 +84,19 @@ class Tree
     all_values unless all_values.empty?
   end
 
+  def inorder(&code_block)
+    if block_given?
+      inorder_with_block(@root, code_block)
+    else
+      values = []
+      inorder_no_block(@root, values)
+      values
+    end
+  end
+
+  def preorder; end
+  def postorder; end
+
   # Thank you pretty print, whoever your creator is!
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
@@ -112,6 +125,22 @@ class Tree
     lowest_node = lowest_node.left until lowest_node.left.nil?
     lowest_node
   end
+
+  def inorder_with_block(current_node, code_block)
+    return if current_node.nil?
+
+    inorder_with_block(current_node.left, code_block)
+    code_block.call current_node
+    inorder_with_block(current_node.right, code_block)
+  end
+
+  def inorder_no_block(current_node, array_to_fill)
+    return if current_node.nil?
+
+    inorder_no_block(current_node.left, array_to_fill)
+    array_to_fill << current_node.data
+    inorder_no_block(current_node.right, array_to_fill)
+  end
 end
 
 test_array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
@@ -125,3 +154,6 @@ quack.delete(24)
 quack.pretty_print
 puts quack.find(26)
 quack.level_order
+puts '-----------------------------'
+quack.inorder { |node| puts node.data }
+p quack.inorder
