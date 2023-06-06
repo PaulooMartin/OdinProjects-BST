@@ -73,7 +73,7 @@ class Tree # rubocop:disable Metrics/ClassLength
     all_values = []
     until queue.empty?
       if block_given?
-        yield queue[0].data
+        yield queue[0]
       else
         all_values << queue[0].data
       end
@@ -130,7 +130,10 @@ class Tree # rubocop:disable Metrics/ClassLength
     depth
   end
 
-  def balanced?; end
+  def balanced?
+
+  end
+
   def rebalance; end
 
   # Thank you pretty print, whoever your creator is!
@@ -243,6 +246,7 @@ puts '-----------------------------'
 quack.postorder { |node| puts node.data }
 p quack.postorder
 quack.pretty_print
-test_node = quack.find(26)
+test_node = quack.find(8)
 puts quack.height(test_node)
 puts quack.depth(test_node)
+puts quack.balanced?
